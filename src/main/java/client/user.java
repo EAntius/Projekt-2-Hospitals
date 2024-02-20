@@ -4,15 +4,16 @@ import java.util.*;
 import java.io.*;
 
 public class user {
-    String name;
-    String password;
-    String role;
-    String department;
+    String name; //username
+    String hashedpassword; //hashed version of incoming password
+    String role; //Their role: patient, nurse, doctor, goverment body
+    String attribute; //For patients, their birthcode. For nurse and doctors, their department. For goverment body, 0
 
-    public user(String name, String password, String role) {
+    public user(String name, String hashedpassword, String role, String attribute) {
         this.name = name;
-        this.password = password;
+        this.hashedpassword = hashedpassword;
         this.role = role;
+        this.attribute = attribute; 
     }
 
     public void read(String filename) {
@@ -33,9 +34,6 @@ public class user {
     public String filefinder(String filename) {
         
         return "";
-    }
-    public void setDepartment(String department) {
-        this.department = department;
     }
 }
 

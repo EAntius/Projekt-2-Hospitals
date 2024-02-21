@@ -1,8 +1,12 @@
 package java.server;
 
 public class Commands {
+    String userRole;
+    String userAttribute;
 
-    public Commands() {
+    public Commands(String role, String attribute) {
+        userRole = role;
+        userAttribute = attribute;
     }
 
     public void execute(String[] command){

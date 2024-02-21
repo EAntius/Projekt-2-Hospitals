@@ -36,7 +36,8 @@ public class server implements Runnable {
       String[] userdata = findUser(subject);
       String subjectRole = userdata[1];
       String subjectAttribute = userdata[2];
-      
+      Commands commander = new Commands(subjectRole, subjectAttribute);
+
       PrintWriter out = null;
       BufferedReader in = null;
       out = new PrintWriter(socket.getOutputStream(), true);
@@ -45,7 +46,7 @@ public class server implements Runnable {
       String clientMsg = null;
       while ((clientMsg = in.readLine()) != null) {
         String[] recieved = clientMsg.split(" ");
-        
+        commander.execute(recieved);
         
         System.out.println("done\n");
       }
@@ -115,9 +116,11 @@ public class server implements Runnable {
         String line = scan.nextLine().toString();
         String[] data = line.split(" ");
         if (data[0].compareTo(subject) == 0) {
+            scan.close();
             return data;
         }
     }
+    scan.close();
     return null;
   }
 }

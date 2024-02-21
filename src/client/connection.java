@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 
 import javax.net.ssl.SSLSocket;
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane.SystemMenuBar;
 
 public class connection {
     private BufferedReader read;
@@ -32,7 +33,7 @@ public class connection {
     }
 
     public void send(String msg) {
-        out.write(msg);
+        out.write(msg + "\n");
         out.flush();
     }
 

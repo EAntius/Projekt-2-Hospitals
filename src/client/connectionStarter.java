@@ -34,13 +34,13 @@ public class connectionStarter {
         // keystore password (storepass)
         ks.load(new FileInputStream(keystoreName), password);  
         // truststore password (storepass);
-        ts.load(new FileInputStream("clienttruststore"), password); 
+        ts.load(new FileInputStream("./openSSL/clienttruststore"), password); 
         kmf.init(ks, password); // user password (keypass)
         tmf.init(ts); // keystore can be used as truststore here
         ctx.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
         factory = ctx.getSocketFactory();
       } catch (Exception e) {
-        return new connection();
+        throw e;
       }
       SSLSocket socket = (SSLSocket)factory.createSocket(host, port);
       System.out.println("\nsocket before handshake:\n" + socket + "\n");

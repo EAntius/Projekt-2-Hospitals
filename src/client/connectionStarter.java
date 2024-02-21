@@ -40,11 +40,9 @@ public class connectionStarter {
         ctx.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
         factory = ctx.getSocketFactory();
       } catch (Exception e) {
-        throw e;
+        return new connection();
       }
       SSLSocket socket = (SSLSocket)factory.createSocket(host, port);
-      System.out.println("\nsocket before handshake:\n" + socket + "\n");
-
       /*
        * send http request
        *
@@ -53,16 +51,7 @@ public class connectionStarter {
        */
 
       socket.startHandshake();
-      SSLSession session = socket.getSession();
-      Certificate[] cert = session.getPeerCertificates();
-      String subject = ((X509Certificate) cert[0]).getSubjectX500Principal().getName();
-      String issuer = ((X509Certificate) cert[0]).getIssuerDN().getName();
-      String serial = ((X509Certificate) cert[0]).getSerialNumber().toString();
-      System.out.println("certificate name (subject DN field) on certificate received from server:\n" + subject + "\n");
-      System.out.println("client issuer: " + issuer);
-      System.out.println("client serialnr: " + serial);
-      System.out.println("socket after handshake:\n" + socket + "\n");
-      System.out.println("secure connection established\n\n");
+      System.out.println("\n\nsecure connection established\n\n");
 
       BufferedReader read = new BufferedReader(new InputStreamReader(System.in));
       PrintWriter out = new PrintWriter(socket.getOutputStream(), true);

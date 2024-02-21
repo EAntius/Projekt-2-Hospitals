@@ -25,7 +25,6 @@ public class connectionStarter {
     try {
       SSLSocketFactory factory = null;
       try {
-        
         KeyStore ks = KeyStore.getInstance("JKS");
         KeyStore ts = KeyStore.getInstance("JKS");
         KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
@@ -34,7 +33,7 @@ public class connectionStarter {
         // keystore password (storepass)
         ks.load(new FileInputStream(keystoreName), password);  
         // truststore password (storepass);
-        ts.load(new FileInputStream("./openSSL/clienttruststore"), password); 
+        ts.load(new FileInputStream("./openSSL/clienttruststore"), "password".toCharArray());
         kmf.init(ks, password); // user password (keypass)
         tmf.init(ts); // keystore can be used as truststore here
         ctx.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
@@ -51,7 +50,7 @@ public class connectionStarter {
        */
 
       socket.startHandshake();
-      System.out.println("\n\nsecure connection established\n\n");
+      System.out.println("\n\nsecure connection established\n");
 
       BufferedReader read = new BufferedReader(new InputStreamReader(System.in));
       PrintWriter out = new PrintWriter(socket.getOutputStream(), true);

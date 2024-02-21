@@ -2,11 +2,14 @@ package java.server;
 
 import java.io.*;
 import java.net.*;
+import java.nio.file.Files;
+
 import javax.net.*;
 import javax.net.ssl.*;
 import java.security.KeyStore;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
+import java.util.List;
 import java.util.Scanner;
 
 public class server implements Runnable {
@@ -37,18 +40,19 @@ public class server implements Runnable {
       String[] userdata = findUser(subject);
       String subjectRole = userdata[1];
       String subjectAttribute = userdata[2]; /*This data should be sent to the reference monitor */
-
-      /*Check access in reference monitor */
       
       PrintWriter out = null;
       BufferedReader in = null;
       out = new PrintWriter(socket.getOutputStream(), true);
       in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+      Commands commander = new Commands(out, in);
 
       String clientMsg = null;
       while ((clientMsg = in.readLine()) != null) {
         String[] recieved = clientMsg.split(" "); /*recieved now holds (a command and text file) */
-        
+        if() {
+          commander.execute(recieved, clientMsg);
+        }
         
         System.out.println("done\n");
       }
@@ -125,5 +129,32 @@ public class server implements Runnable {
     }
     scan.close();
     return null;
+  }
+  private boolean accessControl(String[] command, String role, String attribute) {
+    switch(command[0]){
+            case "read":
+                
+            case "write":
+            if (role.compareTo("Doctor") == 1 || role.compareTo("Nurse") == 1) {
+              if (attribute.compareTo(command[1]) == 1) {
+                return true;
+              } else {
+                return false;
+              }
+            } else {
+              return false;
+            }
+            case "delete":
+            
+            case "create":
+
+            case "available":
+
+            case "ls":
+          
+            
+            default:
+            return false;
+        }
   }
 }

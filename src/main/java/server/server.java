@@ -33,9 +33,12 @@ public class server implements Runnable {
       System.out.println("client issuer: " + issuer);
       System.out.println("client serialnr: " + serial);
       System.out.println(numConnectedClients + " concurrent connection(s)\n");
+      
       String[] userdata = findUser(subject);
       String subjectRole = userdata[1];
-      String subjectAttribute = userdata[2];
+      String subjectAttribute = userdata[2]; /*This data should be sent to the reference monitor */
+
+      /*Check access in reference monitor */
       
       PrintWriter out = null;
       BufferedReader in = null;
@@ -44,7 +47,7 @@ public class server implements Runnable {
 
       String clientMsg = null;
       while ((clientMsg = in.readLine()) != null) {
-        String[] recieved = clientMsg.split(" ");
+        String[] recieved = clientMsg.split(" "); /*recieved now holds (a command and text file) */
         
         
         System.out.println("done\n");
@@ -109,6 +112,7 @@ public class server implements Runnable {
     return null;
   }
 
+  /*Finds user in database and returns the data for that user (user, role, attribute) */
   private String[] findUser(String subject) {
     Scanner scan = new Scanner("./hospitaldatabase/userdatabase/users.txt");
     while(scan.hasNext()) {

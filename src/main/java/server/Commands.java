@@ -4,11 +4,11 @@ public class Commands {
 
     public Commands() {
     }
-    
+
     public void execute(String[] command){
         switch(command[0]){
             case "read":
-
+                
             break;
             case "write":
 

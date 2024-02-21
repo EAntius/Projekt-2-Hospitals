@@ -4,6 +4,7 @@ import java.net.*;
 import java.io.*;
 import javax.net.ssl.*;
 import java.security.cert.X509Certificate;
+import java.sql.Connection;
 import java.security.KeyStore;
 import java.security.cert.*;
 
@@ -16,8 +17,8 @@ import java.security.cert.*;
  * the firewall by following SSLSocketClientWithTunneling.java.
  */
 
-public class client {
-  public static void startConnection(char[] password, String keystoreName) throws Exception {
+public class connectionStarter {
+  public static connection startConnection(char[] password, String keystoreName) throws Exception {
     String host = "localhost";
     int port = 9876;
 
@@ -39,7 +40,7 @@ public class client {
         ctx.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
         factory = ctx.getSocketFactory();
       } catch (Exception e) {
-        throw new IOException(e.getMessage());
+        return new connection();
       }
       SSLSocket socket = (SSLSocket)factory.createSocket(host, port);
       System.out.println("\nsocket before handshake:\n" + socket + "\n");
@@ -66,26 +67,11 @@ public class client {
       BufferedReader read = new BufferedReader(new InputStreamReader(System.in));
       PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
       BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-      String msg;
-      
-      for (;;) {
-        System.out.print(">");
-        msg = read.readLine();
-        if (msg.equalsIgnoreCase("quit")) {
-          break;
-        }
-        System.out.print("sending '" + msg + "' to server...");
-        out.println(msg);
-        out.flush();
-        System.out.println("done");
-        System.out.println("received '" + in.readLine() + "' from server\n");
-      }
-      in.close();
-      out.close();
-      read.close();
-      socket.close();
+
+      return new connection(read, out, in, socket);
     } catch (Exception e) {
       e.printStackTrace();
+      return new connection();
     }
   }
 }

@@ -2,11 +2,13 @@ package java.server;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.Scanner;
 
 /*Describes what should happen based on which command was sent from client */
 public class Commands {
@@ -18,7 +20,7 @@ public class Commands {
         this.in = in;
     }
 
-    public void execute(String[] command, String fileName){
+    public void execute(String[] command, String fileName, String[] userdata){
         File root = new File("./src/hospitaldatabase/Departments");
         switch(command[0]){
             case "read":
@@ -57,14 +59,24 @@ public class Commands {
                 File file2 = new File(path);
                 File[] fileList = file2.listFiles();
                 for(int i = 0; i < fileList.length; i++) {
-                    menu += String.format("* %d - %s\n", i+1, fileList[i].getName());
+                    try {    
+                        Scanner scan = new Scanner(fileList[i]);
+                        String[] personel = scan.nextLine().trim().split(" ");
+                        if(true) {
+                            menu += String.format("* %d - %s\n", i+1, fileList[i].getName());
+                        }
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
                 }
+
             } else {
                 File[] fileList = root.listFiles();
                 for(int i = 0; i < fileList.length; i++) {
                     menu += String.format("* %d - %s\n", i+1, fileList[i].getName());
                 }
             }
+
             
             break;
             

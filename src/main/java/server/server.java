@@ -50,8 +50,8 @@ public class server implements Runnable {
       String clientMsg = null;
       while ((clientMsg = in.readLine()) != null) {
         String[] recieved = clientMsg.split(" "); /*recieved now holds (a command and text file) */
-        if() {
-          commander.execute(recieved, clientMsg);
+        if(accessControl(recieved, subjectRole, subjectAttribute)) {
+          commander.execute(recieved, clientMsg, userdata);
         }
         
         System.out.println("done\n");
@@ -138,20 +138,40 @@ public class server implements Runnable {
             if (role.compareTo("Doctor") == 1 || role.compareTo("Nurse") == 1) {
               if (attribute.compareTo(command[1]) == 1) {
                 return true;
-              } else {
-                return false;
               }
-            } else {
+            }
+            return false;
+            case "delete":
+            if (role.compareTo("Goverment Body") == 1) {
+              return true;
+            }
+            return false;
+            case "create":
+            if (role.compareTo("Doctor") == 1) {
+              if (attribute.compareTo(command[1]) == 1) {
+                return true;
+              } 
+            }
+            return false;
+            case "ls":
+            switch(role) {
+              case "Patient":
+              return true;
+              case "Nurse":
+              if (attribute.compareTo(command[1]) == 1){
+                return true;
+              }
+              return false;
+
+              case "Doctor":
+              if (attribute.compareTo(command[1]) == 1){
+                return true;
+              }
+              return false;
+
+              default:
               return false;
             }
-            case "delete":
-            
-            case "create":
-
-            case "available":
-
-            case "ls":
-          
             
             default:
             return false;

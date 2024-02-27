@@ -19,6 +19,7 @@ public class application {
             
             System.out.println("You can now communicate with server:");
             serverLoop(conn);
+            conn.endConnection();
         }
     }
 
@@ -38,6 +39,9 @@ public class application {
             }
 
             switch (msg.split(" ")[0]) {
+                case "quit":
+                    System.out.println("\n\n...Exiting medical records...\n\n");
+                    return;
                 case "write":
                     connection.send(editor.openTextEditor(response));
                     System.out.println(connection.getResponse());

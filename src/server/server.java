@@ -62,10 +62,10 @@ public class server implements Runnable {
           sendMessage(out, commander.execute(recieved, userdata));
           if (recieved[0].equals("write")) {
             String editedText = getMessage(in);
-            commander.writeToFile(editedText, recieved[1]);
+            commander.writeToFile(editedText, recieved[1], userdata[2]);
           } else if(recieved[0].equals("create")) {
-            String editedText = in.readLine();
-            commander.writeToFile(editedText, recieved[3]);
+            String editedText = getMessage(in);
+            sendMessage(out, commander.writeToFile(editedText, recieved[3], userdata[2]));
           }
 
         } else {

@@ -57,13 +57,13 @@ public class server implements Runnable {
       String subjectRole = userdata[1];
       String subjectAttribute = userdata[2]; /*This data should be sent to the reference monitor */
 
-      while ((clientMsg = in.readLine()) != null) {
+      while ((clientMsg = getMessage(in)) != null) {
         String[] recieved = clientMsg.split(" "); /*recieved now holds (a command and text file) */
         if(accessControl(recieved, subjectRole, subjectAttribute)) {
           out.print(commander.execute(recieved, userdata, 0));
           out.flush();
           if (recieved[0] == "write") {
-            String editedText = in.readLine();
+            String editedText = getMessage(in);
             commander.writeToFile(editedText, recieved[1]);
           }
 
@@ -188,5 +188,16 @@ public class server implements Runnable {
             default:
             return false;
         }
+  }
+
+  private String getMessage(BufferedReader in) throws IOException {
+    StringBuilder responseBuilder = new StringBuilder();
+    String line;
+
+    while ((line = in.readLine()) != "END_OF_FILE") {
+        responseBuilder.append(line).append("\n");
+    }
+
+    return responseBuilder.toString();
   }
 }

@@ -12,45 +12,51 @@ import java.util.Scanner;
 
 /*Describes what should happen based on which command was sent from client */
 public class Commands {
-    private PrintWriter out;
-    private BufferedReader in;
 
-    public Commands(PrintWriter out, BufferedReader in) {
-        this.out = out;
-        this.in = in;
-    }
-
-    public void execute(String[] command, String fileName, String[] userdata){
+    public String execute(String[] command, String[] userdata, int phase){
         File root = new File("./src/hospitaldatabase/Departments");
         switch(command[0]){
             case "read":
-                File file = findFile(fileName, root);
+                File file = findFile(command[1], root);
                 if(file != null) {
                     try{
                         List<String> fileLines = Files.readAllLines(file.toPath());
                         String fileContent = String.join("\n", fileLines);
-                        out.write(fileContent);
+                        return fileContent;
                     } catch(IOException e) {
-                        
+                        e.printStackTrace();
                     }
                 }
-            break;
+                return "File not found";
             case "write":
-                /*Send file to client, recieve file and update old file */
-               
-
-            break;
+                try{
+                    File toExctract = findFile(command[1], root);
+                    List<String> fileLines = Files.readAllLines(toExctract.toPath());
+                    String fileContent = String.join("\n", fileLines);
+                    return fileContent;
+                } catch(IOException e) {
+                    e.printStackTrace();
+                    return "Exception";
+                }   
 
             case "delete":
-
-            break;
+                File exists = findFile(command[1], root);
+                if (exists != null) {
+                    exists.delete();
+                    return "Delete successful";
+                }
+                return "Delete unsuccessful";
             case "create":
-
-            break;
-
-            case "available":
-
-            break;
+                File newRecord = new File(command[4]);
+                try {    
+                    FileWriter recordtext = new FileWriter(newRecord);
+                    recordtext.write(command[1] + " " + command[2] + " " + userdata[0] + " " + userdata[2]);
+                    recordtext.close();
+                    return "creation successful";
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return "Creation unsuccessful";
+                }
 
             case "ls":
             String menu = "** Files **\n";
@@ -62,9 +68,11 @@ public class Commands {
                     try {    
                         Scanner scan = new Scanner(fileList[i]);
                         String[] personel = scan.nextLine().trim().split(" ");
-                        if(true) {
+                        if(personel[0].compareTo(userdata[0]) == 1 || userdata[2].compareTo(personel[3]) == 1) {
                             menu += String.format("* %d - %s\n", i+1, fileList[i].getName());
                         }
+                        scan.close();
+                        return menu;
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -77,12 +85,10 @@ public class Commands {
                 }
             }
 
-            
-            break;
+            return menu;
             
             default:
-
-            break;
+            return "No such command";
         }
     }
 
@@ -100,6 +106,17 @@ public class Commands {
         }
         return null;
         
+    }
+
+    public void writeToFile(String editedText, String fileName) {
+        File root = new File("./src/hospitaldatabase/Departments");
+        File toEdit = findFile(fileName, root);
+        try {    
+            FileWriter writer = new FileWriter(toEdit);
+            writer.write(editedText);
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
 

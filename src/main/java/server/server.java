@@ -45,13 +45,18 @@ public class server implements Runnable {
       BufferedReader in = null;
       out = new PrintWriter(socket.getOutputStream(), true);
       in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-      Commands commander = new Commands(out, in);
+      Commands commander = new Commands();
 
       String clientMsg = null;
       while ((clientMsg = in.readLine()) != null) {
         String[] recieved = clientMsg.split(" "); /*recieved now holds (a command and text file) */
         if(accessControl(recieved, subjectRole, subjectAttribute)) {
-          commander.execute(recieved, clientMsg, userdata);
+          out.write(commander.execute(recieved, userdata, 0));
+          if (recieved[0] == "write") {
+            String editedText = in.readLine();
+            commander.writeToFile(editedText, recieved[1]);
+          }
+
         }
         
         System.out.println("done\n");
@@ -133,7 +138,7 @@ public class server implements Runnable {
   private boolean accessControl(String[] command, String role, String attribute) {
     switch(command[0]){
             case "read":
-                
+              
             case "write":
             if (role.compareTo("Doctor") == 1 || role.compareTo("Nurse") == 1) {
               if (attribute.compareTo(command[1]) == 1) {

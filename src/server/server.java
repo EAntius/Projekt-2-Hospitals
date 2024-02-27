@@ -45,13 +45,11 @@ public class server implements Runnable {
 
       String[] userdata = findUser(subject);
       if (userdata == null) {
-        out.println("No user found");
-        out.flush();
+        sendMessage(out, "No user found");
         socket.close();
         return;
       } else {
-        out.println("User authenticated");
-        out.flush();
+        sendMessage(out, "User authenticated");
       }
 
       String subjectRole = userdata[1];
@@ -61,9 +59,7 @@ public class server implements Runnable {
       while ((clientMsg = getMessage(in)) != null) {
         String[] recieved = clientMsg.split(" "); /*recieved now holds (a command and text file) */
         if(accessControl(recieved, subjectRole, subjectAttribute)) {
-          System.out.println("Jag är inne");
-          out.println(commander.execute(recieved, userdata));
-          out.flush();
+          sendMessage(out, commander.execute(recieved, userdata));
           if (recieved[0].equals("write")) {
             String editedText = getMessage(in);
             commander.writeToFile(editedText, recieved[1]);
@@ -73,8 +69,7 @@ public class server implements Runnable {
           }
 
         } else {
-          out.println("Command not found");
-          out.flush();
+          sendMessage(out,"Command not found");
         }
       }
       in.close();
@@ -196,14 +191,23 @@ public class server implements Runnable {
         }
   }
 
+  private void sendMessage(PrintWriter out , String msg) {
+        for (String line :msg.split("\n")) {
+          out.println(line);
+          out.flush();
+        }
+        out.println("END_OF_FILE");
+        out.flush();
+  }
+
   private String getMessage(BufferedReader in) throws IOException {
     StringBuilder responseBuilder = new StringBuilder();
     String line;
 
-    while ((line = in.readLine()) != "END_OF_FILE") {
+    while (!(line = in.readLine()).equals("END_OF_FILE")) {
         responseBuilder.append(line).append("\n");
     }
 
-    return responseBuilder.toString();
+    return responseBuilder.toString().trim();
   }
 }

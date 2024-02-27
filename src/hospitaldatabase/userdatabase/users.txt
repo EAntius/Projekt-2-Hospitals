@@ -1,1 +1,1 @@
-user role attribute
+username hashedpassword role department

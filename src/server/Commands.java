@@ -20,9 +20,16 @@ public class Commands {
                 File file = findFile(command[1], root);
                 if(file != null) {
                     try{
-                        List<String> fileLines = Files.readAllLines(file.toPath());
-                        String fileContent = String.join("\n", fileLines);
-                        return fileContent;
+                        Scanner scan = new Scanner(file);
+                        String[] personel = scan.nextLine().trim().split(" ");
+                        if(personel[0].compareTo(userdata[0]) == 1 || userdata[2].compareTo(personel[3]) == 1) {
+                            List<String> fileLines = Files.readAllLines(file.toPath());
+                            String fileContent = String.join("\n", fileLines);
+                            scan.close();
+                            return fileContent;
+                        }
+                        scan.close();
+                        return "Read failed due to insufficient acces";
                     } catch(IOException e) {
                         e.printStackTrace();
                     }

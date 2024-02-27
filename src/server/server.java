@@ -64,6 +64,7 @@ public class server implements Runnable {
           System.out.println("Jag är inne");
           out.println(commander.execute(recieved, userdata));
           out.flush();
+
           if (recieved[0].equals("write")) {
             String editedText = getMessage(in);
             commander.writeToFile(editedText, recieved[1]);

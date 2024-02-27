@@ -57,9 +57,7 @@ public class Commands {
                 File newRecord = new File(root +"\\"+ userdata[2] + "\\" + command[3]);
                 try {    
                     FileWriter recordtext = new FileWriter(newRecord);
-                    System.out.println(newRecord.getAbsolutePath());
                     recordtext.write(command[1] + " " + command[2] + " " + userdata[0] + " " + userdata[2]);
-                    System.out.println("hjd");
                     recordtext.close();
                     return "creation successful";
                 } catch (IOException e) {

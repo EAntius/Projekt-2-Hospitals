@@ -33,7 +33,9 @@ public class connection {
     }
 
     public void send(String msg) {
-        out.println(msg + "\n");
+        out.print(msg + "\n");
+        out.flush();
+        out.print("END_OF_FILE");
         out.flush();
     }
 

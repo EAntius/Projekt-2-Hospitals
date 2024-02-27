@@ -35,14 +35,6 @@ public class server implements Runnable {
 
       System.out.println(numConnectedClients + " concurrent connection(s)\n");
       
-      String[] userdata = findUser(subject);
-      if (userdata == null) {
-        return;
-      }
-
-      String subjectRole = userdata[1];
-      String subjectAttribute = userdata[2]; /*This data should be sent to the reference monitor */
-      
       PrintWriter out = null;
       BufferedReader in = null;
       out = new PrintWriter(socket.getOutputStream(), true);
@@ -50,6 +42,15 @@ public class server implements Runnable {
       Commands commander = new Commands();
 
       String clientMsg = null;
+
+      String[] userdata = findUser(subject);
+      if (userdata == null) {
+        out.write("No user found");
+      }
+
+      String subjectRole = userdata[1];
+      String subjectAttribute = userdata[2]; /*This data should be sent to the reference monitor */
+
       while ((clientMsg = in.readLine()) != null) {
         String[] recieved = clientMsg.split(" "); /*recieved now holds (a command and text file) */
         if(accessControl(recieved, subjectRole, subjectAttribute)) {

@@ -67,6 +67,9 @@ public class server implements Runnable {
             commander.writeToFile(editedText, recieved[1]);
           }
 
+        } else {
+          out.println("Command not found");
+          out.flush();
         }
         
         System.out.println("done\n");

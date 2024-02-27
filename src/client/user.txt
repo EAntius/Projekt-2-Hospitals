@@ -1,4 +1,7 @@
-Jakob jakob
-Edvin edvin
-Frida frida
-Bob ./openSSL/BobBobsson
+Jakob ./openSSL/Jakob LolIkyhF22.-y
+Edvin ./openSSL/Edvin ltHo
+Frida ./openSSL/Frida kIgsOuq10.
+Hugo ./openSSL/Hugo koLi
+Skatteverket ./openSSL/Skatteverket opSQi5.O
+Hassan ./openSSL/Hassan jOkQ
+test ./openSSL/test p

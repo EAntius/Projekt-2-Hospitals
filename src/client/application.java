@@ -10,6 +10,7 @@ public class application {
             String keystore = loginCredentials[0];
             String password = loginCredentials[1];
 
+            System.out.println(password);
             connection conn = connectionStarter.startConnection(password.toCharArray(), keystore);
             if (!conn.connectedSuccessfully()) {
                 System.out.println("Wrong username or password");
@@ -33,7 +34,9 @@ public class application {
             }
             connection.send(msg);
             String response = connection.getResponse();
-            if (response.equals("Command not found")) {
+            if (response == null) {
+                continue;
+            } if (response.equals("Command not found")) {
                 System.out.println(response);
                 continue;
             }

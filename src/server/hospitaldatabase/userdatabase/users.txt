@@ -1,2 +1,2 @@
 username role department
-test Doctor surgery
+test Doctor 0

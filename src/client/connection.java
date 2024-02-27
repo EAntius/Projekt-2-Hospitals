@@ -33,15 +33,23 @@ public class connection {
     }
 
     public void send(String msg) {
-        out.print(msg + "\n");
-        out.flush();
-        out.print("END_OF_FILE");
+        for (String line :msg.split("\n")) {
+            out.println(line);
+            out.flush();
+          }
+        out.println("END_OF_FILE");
         out.flush();
     }
 
     public String getResponse() throws IOException{
-        String response = in.readLine();
-        return response;
+        StringBuilder responseBuilder = new StringBuilder();
+        String line;
+
+        while (!(line = in.readLine()).equals("END_OF_FILE")) {
+            responseBuilder.append(line).append("\n");
+        }
+
+        return responseBuilder.toString().trim();
     }
 
     public String getInput() throws IOException{

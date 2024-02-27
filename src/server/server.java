@@ -60,7 +60,7 @@ public class server implements Runnable {
       while ((clientMsg = in.readLine()) != null) {
         String[] recieved = clientMsg.split(" "); /*recieved now holds (a command and text file) */
         if(accessControl(recieved, subjectRole, subjectAttribute)) {
-          out.println(commander.execute(recieved, userdata, 0));
+          out.print(commander.execute(recieved, userdata, 0));
           out.flush();
           if (recieved[0] == "write") {
             String editedText = in.readLine();
@@ -71,8 +71,6 @@ public class server implements Runnable {
           out.println("Command not found");
           out.flush();
         }
-        
-        System.out.println("done\n");
       }
       in.close();
       out.close();
@@ -151,43 +149,41 @@ public class server implements Runnable {
             case "read":
 
             case "write":
-            if (role.compareTo("Doctor") == 1 || role.compareTo("Nurse") == 1) {
-              if (attribute.compareTo(command[1]) == 1) {
+            if (role.equals("Doctor") || role.equals("Nurse")) {
+              if (attribute.equals(command[1])) {
                 return true;
               }
             }
             return false;
             case "delete":
-            if (role.compareTo("Goverment Body") == 1) {
+            if (role.equals("GovermentBody")) {
               return true;
             }
             return false;
             case "create":
-            if (role.compareTo("Doctor") == 1) {
-              if (attribute.compareTo(command[1]) == 1) {
+              if (role.equals("Doctor")) {
                 return true;
-              } 
-            }
+              }
             return false;
             case "ls":
-            switch(role) {
-              case "Patient":
-              return true;
-              case "Nurse":
-              if (attribute.compareTo(command[1]) == 1){
-                return true;
-              }
-              return false;
+              switch(role) {
+                case "Patient":
+                  return true;
+                case "Nurse":
+                  if (attribute.equals(command[1])){
+                    return true;
+                  }
+                  return false;
 
-              case "Doctor":
-              if (attribute.compareTo(command[1]) == 1){
-                return true;
-              }
-              return false;
+                case "Doctor":
+                  if (attribute.equals(command[1])){
+                    return true;
+                  }
+                  return false;
 
-              default:
-              return false;
-            }
+                default:
+                return false;
+              }
             
             default:
             return false;

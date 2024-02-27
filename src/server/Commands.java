@@ -47,7 +47,7 @@ public class Commands {
                 }
                 return "Delete unsuccessful";
             case "create":
-                File newRecord = new File(command[4]);
+                File newRecord = new File(command[3]);
                 try {    
                     FileWriter recordtext = new FileWriter(newRecord);
                     recordtext.write(command[1] + " " + command[2] + " " + userdata[0] + " " + userdata[2]);

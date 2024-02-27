@@ -28,16 +28,18 @@ public class server implements Runnable {
       SSLSession session = socket.getSession();
       Certificate[] cert = session.getPeerCertificates();
       String subject = ((X509Certificate) cert[0]).getSubjectX500Principal().getName();
-      String issuer = ((X509Certificate) cert[0]).getIssuerDN().getName();
-      String serial = ((X509Certificate) cert[0]).getSerialNumber().toString();
+
       numConnectedClients++;
       System.out.println("client connected");
       System.out.println("client name (cert subject DN field): " + subject);
-      System.out.println("client issuer: " + issuer);
-      System.out.println("client serialnr: " + serial);
+
       System.out.println(numConnectedClients + " concurrent connection(s)\n");
       
       String[] userdata = findUser(subject);
+      if (userdata == null) {
+        return;
+      }
+
       String subjectRole = userdata[1];
       String subjectAttribute = userdata[2]; /*This data should be sent to the reference monitor */
       
@@ -77,10 +79,8 @@ public class server implements Runnable {
   private void newListener() { (new Thread(this)).start(); } // calls run()
   public static void main(String args[]) {
     System.out.println("\nServer Started\n");
-    int port = -1;
-    if (args.length >= 1) {
-      port = Integer.parseInt(args[0]);
-    }
+    int port = 9876;
+
     String type = "TLSv1.2";
     try {
       ServerSocketFactory ssf = getServerSocketFactory(type);
@@ -138,7 +138,7 @@ public class server implements Runnable {
   private boolean accessControl(String[] command, String role, String attribute) {
     switch(command[0]){
             case "read":
-              
+
             case "write":
             if (role.compareTo("Doctor") == 1 || role.compareTo("Nurse") == 1) {
               if (attribute.compareTo(command[1]) == 1) {

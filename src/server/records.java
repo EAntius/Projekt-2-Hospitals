@@ -1,4 +1,4 @@
-package java.server;
+package server;
 
 public class records {
     String patient;

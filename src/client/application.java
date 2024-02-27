@@ -13,55 +13,44 @@ public class application {
             connection conn = connectionStarter.startConnection(password.toCharArray(), keystore);
             if (!conn.connectedSuccessfully()) {
                 System.out.println("Wrong username or password");
+                Thread.sleep(10);
                 continue;
             }
             
             System.out.println("You can now communicate with server:");
-            String msg;
-            while (true) {
-                System.out.print("\n\n>");
-                msg = conn.getInput();
-                if (msg.equalsIgnoreCase("quit")) {
-                  break;
-                }
-                conn.send(msg);
+            serverLoop(conn);
+        }
+    }
 
-                switch (msg.split(" ")[0]) {
-                    case "write":
-                        write(conn, msg);
-                        break;
-                    case "create":
-                        create(conn, msg);
-                        break;
-                    default:
-                        System.out.println(conn.getResponse());
-                        break;
-                }
+    private static void serverLoop(connection connection) throws IOException, InterruptedException {
+        String msg;
+        while (true) {
+            System.out.print("\n\n>");
+            msg = connection.getInput();
+            if (msg.equalsIgnoreCase("quit")) {
+              break;
             }
-            break;
-        }
-    }
+            connection.send(msg);
+            String response = connection.getResponse();
+            if (response.equals("Command not found")) {
+                System.out.println(response);
+                continue;
+            }
 
-    public static void write(connection conn, String msg) throws IOException, InterruptedException {
-        String text = conn.getResponse();
-        if (text == "You don't have privileges for this action") {
-            System.out.println(text);
-            return;
+            switch (msg.split(" ")[0]) {
+                case "write":
+                    connection.send(editor.openTextEditor(response));
+                    System.out.println(connection.getResponse());
+                    break;
+                case "create":
+                    connection.send(editor.openTextEditor(""));
+                    System.out.println(connection.getResponse());
+                    break;
+                default:
+                    System.out.println(response);
+                    break;
+            }
         }
-        String editedText = editor.openTextEditor(text);
-        conn.send(editedText);
-    }
-
-    public static void create(connection conn, String msg) throws IOException, InterruptedException {
-        String text = conn.getResponse();
-        if (text == "You don't have privileges for this action") {
-            System.out.println(text);
-            return;
-        }
-
-        //TODO - somehow parse response and create file
-        String editedText = editor.openTextEditor(text);
-        
-        conn.send(editedText);
+        return;
     }
 }

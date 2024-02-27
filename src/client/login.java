@@ -9,7 +9,7 @@ import java.io.Console;
 
 public class login {
     private static Scanner scanner = new Scanner(System.in);
-    
+
     public static String[] getUserCredentials() throws Exception {
         Console console = System.console();
         Map<String,String> keystores = getKeystores();
@@ -24,7 +24,7 @@ public class login {
             String password = new String(passwordArray);
 
             if (!keystores.containsKey(username)) {
-                Thread.sleep(5); //prevent brute-force attacks
+                Thread.sleep(10); //prevent brute-force attacks
                 System.out.println("Wrong password or username");
                 continue;
             } 

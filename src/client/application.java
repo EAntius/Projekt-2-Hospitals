@@ -17,7 +17,15 @@ public class application {
                 Thread.sleep(10);
                 continue;
             }
-            
+
+            String handshake_response = conn.getResponse();
+            System.out.println(handshake_response);
+            if (!handshake_response.equals("User authenticated")) {
+                System.out.println("Wrong username or password");
+                Thread.sleep(10);
+                continue;
+            }
+
             System.out.println("You can now communicate with server:");
             serverLoop(conn);
             conn.endConnection();

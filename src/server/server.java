@@ -27,7 +27,7 @@ public class server implements Runnable {
       newListener();
       SSLSession session = socket.getSession();
       Certificate[] cert = session.getPeerCertificates();
-      String subject = ((X509Certificate) cert[0]).getSubjectX500Principal().getName();
+      String subject = ((X509Certificate) cert[0]).getSubjectX500Principal().getName().substring(3);
 
       numConnectedClients++;
       System.out.println("client connected");
@@ -44,8 +44,16 @@ public class server implements Runnable {
       String clientMsg = null;
 
       String[] userdata = findUser(subject);
+      System.out.println(userdata);
       if (userdata == null) {
         out.write("No user found");
+        out.flush();
+        socket.close();
+        return;
+      } else {
+        System.out.println("askdj");
+        out.write("User authenticated");
+        out.flush();
       }
 
       String subjectRole = userdata[1];
@@ -55,6 +63,7 @@ public class server implements Runnable {
         String[] recieved = clientMsg.split(" "); /*recieved now holds (a command and text file) */
         if(accessControl(recieved, subjectRole, subjectAttribute)) {
           out.write(commander.execute(recieved, userdata, 0));
+          out.flush();
           if (recieved[0] == "write") {
             String editedText = in.readLine();
             commander.writeToFile(editedText, recieved[1]);
@@ -123,12 +132,12 @@ public class server implements Runnable {
   }
 
   /*Finds user in database and returns the data for that user (user, role, attribute) */
-  private String[] findUser(String subject) {
-    Scanner scan = new Scanner("./hospitaldatabase/userdatabase/users.txt");
-    while(scan.hasNext()) {
+  private String[] findUser(String subject) throws FileNotFoundException {
+    Scanner scan = new Scanner(new File("./hospitaldatabase/userdatabase/users.txt"));
+    while(scan.hasNextLine()) {
         String line = scan.nextLine().toString();
         String[] data = line.split(" ");
-        if (data[0].compareTo(subject) == 0) {
+        if (data[0].equals(subject)) {
             scan.close();
             return data;
         }

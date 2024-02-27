@@ -14,7 +14,7 @@ import java.util.Scanner;
 public class Commands {
 
     public String execute(String[] command, String[] userdata, int phase){
-        File root = new File("./src/hospitaldatabase/Departments");
+        File root = new File("./hospitaldatabase/Departments");
         switch(command[0]){
             case "read":
                 File file = findFile(command[1], root);
@@ -116,7 +116,7 @@ public class Commands {
     }
 
     public void writeToFile(String editedText, String fileName) {
-        File root = new File("./src/hospitaldatabase/Departments");
+        File root = new File("./hospitaldatabase/Departments");
         File toEdit = findFile(fileName, root);
         try {    
             FileWriter writer = new FileWriter(toEdit);

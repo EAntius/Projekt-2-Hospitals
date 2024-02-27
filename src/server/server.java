@@ -55,16 +55,21 @@ public class server implements Runnable {
       }
 
       String subjectRole = userdata[1];
+      System.out.println(subjectRole);
       String subjectAttribute = userdata[2]; /*This data should be sent to the reference monitor */
 
       while ((clientMsg = in.readLine()) != null) {
         String[] recieved = clientMsg.split(" "); /*recieved now holds (a command and text file) */
         if(accessControl(recieved, subjectRole, subjectAttribute)) {
-          out.print(commander.execute(recieved, userdata, 0));
+          System.out.println("Jag är inne");
+          out.println(commander.execute(recieved, userdata));
           out.flush();
-          if (recieved[0] == "write") {
+          if (recieved[0].equals("write")) {
             String editedText = in.readLine();
             commander.writeToFile(editedText, recieved[1]);
+          } else if(recieved[0].equals("create")) {
+            String editedText = in.readLine();
+            commander.writeToFile(editedText, recieved[3]);
           }
 
         } else {
@@ -162,6 +167,7 @@ public class server implements Runnable {
             return false;
             case "create":
               if (role.equals("Doctor")) {
+                System.out.println(role.equals("Doctor"));
                 return true;
               }
             return false;

@@ -13,8 +13,8 @@ import java.util.Scanner;
 /*Describes what should happen based on which command was sent from client */
 public class Commands {
 
-    public String execute(String[] command, String[] userdata, int phase){
-        File root = new File("./hospitaldatabase/Departments");
+    public String execute(String[] command, String[] userdata){
+        File root = new File("hospitaldatabase/Departments/");
         switch(command[0]){
             case "read":
                 File file = findFile(command[1], root);
@@ -54,10 +54,12 @@ public class Commands {
                 }
                 return "Delete unsuccessful";
             case "create":
-                File newRecord = new File(command[3]);
+                File newRecord = new File(root +"\\"+ userdata[2] + "\\" + command[3]);
                 try {    
                     FileWriter recordtext = new FileWriter(newRecord);
+                    System.out.println(newRecord.getAbsolutePath());
                     recordtext.write(command[1] + " " + command[2] + " " + userdata[0] + " " + userdata[2]);
+                    System.out.println("hjd");
                     recordtext.close();
                     return "creation successful";
                 } catch (IOException e) {
@@ -116,11 +118,16 @@ public class Commands {
     }
 
     public void writeToFile(String editedText, String fileName) {
-        File root = new File("./hospitaldatabase/Departments");
+        File root = new File("hospitaldatabase/Departments");
         File toEdit = findFile(fileName, root);
+        if(toEdit == null) {
+           return;
+
+        }
         try {    
             FileWriter writer = new FileWriter(toEdit);
             writer.write(editedText);
+            writer.close();
         }catch (IOException e) {
             e.printStackTrace();
         }

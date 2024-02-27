@@ -33,7 +33,7 @@ public class connection {
     }
 
     public void send(String msg) {
-        out.write(msg + "\n");
+        out.println(msg + "\n");
         out.flush();
     }
 

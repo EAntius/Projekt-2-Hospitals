@@ -44,15 +44,13 @@ public class server implements Runnable {
       String clientMsg = null;
 
       String[] userdata = findUser(subject);
-      System.out.println(userdata);
       if (userdata == null) {
-        out.write("No user found");
+        out.println("No user found");
         out.flush();
         socket.close();
         return;
       } else {
-        System.out.println("askdj");
-        out.write("User authenticated");
+        out.println("User authenticated");
         out.flush();
       }
 
@@ -62,7 +60,7 @@ public class server implements Runnable {
       while ((clientMsg = in.readLine()) != null) {
         String[] recieved = clientMsg.split(" "); /*recieved now holds (a command and text file) */
         if(accessControl(recieved, subjectRole, subjectAttribute)) {
-          out.write(commander.execute(recieved, userdata, 0));
+          out.println(commander.execute(recieved, userdata, 0));
           out.flush();
           if (recieved[0] == "write") {
             String editedText = in.readLine();

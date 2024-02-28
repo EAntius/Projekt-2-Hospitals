@@ -69,15 +69,17 @@ public class Commands {
 
             case "ls":
             String menu = "** Files **\n";
-            if(command[1] != null) {
-                String path = root.getPath() + command[1];
+            if(command.length != 1) {
+                String path = root.getPath() + "/" + command[1];
+                System.out.println(path);
                 File file2 = new File(path);
                 File[] fileList = file2.listFiles();
                 for(int i = 0; i < fileList.length; i++) {
                     try {    
                         Scanner scan = new Scanner(fileList[i]);
                         String[] personel = scan.nextLine().trim().split(" ");
-                        if(personel[0].compareTo(userdata[0]) == 1 || userdata[2].compareTo(personel[3]) == 1) {
+                        System.out.println(personel[0]);
+                        if(personel[0].equals(userdata[0]) || userdata[2].equals(personel[3])) {
                             menu += String.format("* %d - %s\n", i+1, fileList[i].getName());
                         }
                         scan.close();

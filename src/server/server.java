@@ -53,7 +53,6 @@ public class server implements Runnable {
       }
 
       String subjectRole = userdata[1];
-      System.out.println(subjectRole);
       String subjectAttribute = userdata[2]; /*This data should be sent to the reference monitor */
 
       while ((clientMsg = getMessage(in)) != null) {
@@ -62,7 +61,7 @@ public class server implements Runnable {
           sendMessage(out, commander.execute(recieved, userdata));
           if (recieved[0].equals("write")) {
             String editedText = getMessage(in);
-            commander.writeToFile(editedText, recieved[1], userdata[2]);
+            sendMessage(out, commander.writeToFile(editedText, recieved[1], userdata[2]));
           } else if(recieved[0].equals("create")) {
             String editedText = getMessage(in);
             sendMessage(out, commander.writeToFile(editedText, recieved[3], userdata[2]));
@@ -147,36 +146,38 @@ public class server implements Runnable {
   private boolean accessControl(String[] command, String role, String attribute) {
     switch(command[0]){
             case "read":
-            switch(role) {
-              case "Patient":
-                return true;
-              case "Nurse":
-                if (attribute.equals(command[1])){
+              switch(role) {
+                case "Patient":
                   return true;
-                }
-                return false;
+                case "Nurse":
+                  if (attribute.equals(command[1])){
+                    return true;
+                  }
+                  return false;
 
-              case "Doctor":
-                if (attribute.equals(command[1])){
-                  return true;
-                }
-                return false;
+                case "Doctor":
+                  if (attribute.equals(command[1])){
+                    return true;
+                  }
+                  return false;
               }
+
             case "write":
             if (role.equals("Doctor") || role.equals("Nurse")) {
-              if (attribute.equals(command[1])) {
-                return true;
-              }
+              return true;
             }
             return false;
+
+
             case "delete":
             if (role.equals("GovermentBody")) {
               return true;
             }
             return false;
+
+
             case "create":
               if (role.equals("Doctor")) {
-                System.out.println(role.equals("Doctor"));
                 return true;
               }
             return false;
@@ -190,6 +191,7 @@ public class server implements Runnable {
                   }
                   return false;
 
+                  
                 case "Doctor":
                   if (attribute.equals(command[1])){
                     return true;

@@ -3,6 +3,7 @@ package server;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -39,6 +40,7 @@ public class Commands {
                 try{
                     File toExctract = findFile(command[1], root);
                     List<String> fileLines = Files.readAllLines(toExctract.toPath());
+                    fileLines.remove(0);
                     String fileContent = String.join("\n", fileLines);
                     return fileContent;
                 } catch(IOException e) {
@@ -54,7 +56,7 @@ public class Commands {
                 }
                 return "Delete unsuccessful";
             case "create":
-                File newRecord = new File(root +"\\"+ userdata[2] + "\\" + command[3]);
+                File newRecord = new File(root +"/"+ userdata[2] + "/" + command[3]);
                 try {    
                     FileWriter recordtext = new FileWriter(newRecord);
                     recordtext.write(command[1] + " " + command[2] + " " + userdata[0] + " " + userdata[2]);
@@ -101,40 +103,46 @@ public class Commands {
         }
     }
 
-    /*The first time, file is set to "Departments" */
-    public File findFile(String name, File file) {
-        System.out.println(name);
-        File[] list = file.listFiles();
-        if(list != null) {
-            for(File f : list) {
-                System.out.println(f.getName());
-                if(name.equals(f.getName())) {
-                    System.out.println(f.getName());
-                    System.out.println("TJABBALABBA");
-                    return f;
-                
-                } else if(file.isDirectory()) {
-                    System.out.println("Is dir");
-                    return findFile(name, f);
+    public static File findFile(String fileName, File directory) {
+        // Check if the given directory is valid
+        if (!directory.isDirectory()) {
+            return null;
+        }
+
+        File[] files = directory.listFiles();
+
+        if (files != null) {
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    // Recursively search in subdirectories
+                    File foundFile = findFile(fileName, file);
+                    if (foundFile != null) {
+                        return foundFile;
+                    }
+                } else if (file.getName().equals(fileName)) {
+                    // File found
+                    return file;
                 }
             }
         }
+
+        // File not found in the current directory or its subdirectories
         return null;
-        
     }
 
     public String writeToFile(String editedText, String fileName, String userdata) {
-        File start = new File(root +"\\"+ userdata);
-        System.out.println(root +"\\"+ userdata);
+        File start = new File(root +"/"+ userdata);
         File toEdit = findFile(fileName, start);
         if(toEdit == null) {
            return "No such file";
-
         }
-        try {    
+        try {
+            BufferedReader existingText = new BufferedReader(new FileReader(toEdit));
+            String header = existingText.readLine();
             FileWriter writer = new FileWriter(toEdit);
-            writer.write(editedText);
+            writer.write(header + "\n" + editedText);
             writer.close();
+            existingText.close();
             return "Success";
         }catch (IOException e) {
             e.printStackTrace();

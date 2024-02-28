@@ -1,5 +1,5 @@
 username role department
-test Patient 0
+test Doctor surgery
 Edvin Nurse emergency
 Hugo Nurse kardiolog
 Jakob Patient 0

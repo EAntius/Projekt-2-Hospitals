@@ -152,11 +152,15 @@ public class server implements Runnable {
               return true;
             }
             return false;
+
+
             case "delete":
             if (role.equals("GovermentBody")) {
               return true;
             }
             return false;
+
+
             case "create":
               if (role.equals("Doctor")) {
                 return true;
@@ -172,6 +176,7 @@ public class server implements Runnable {
                   }
                   return false;
 
+                  
                 case "Doctor":
                   if (attribute.equals(command[1])){
                     return true;

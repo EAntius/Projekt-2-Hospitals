@@ -6,3 +6,4 @@ Jakob Patient 0
 Hassan Doctor emergency
 Frida Doctor kardiolog
 Skatteverket GovernmentBody 1
+new Patient 0

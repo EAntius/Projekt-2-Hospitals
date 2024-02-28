@@ -146,31 +146,36 @@ public class server implements Runnable {
   private boolean accessControl(String[] command, String role, String attribute) {
     switch(command[0]){
             case "read":
-            switch(role) {
-              case "Patient":
-                return true;
-              case "Nurse":
-                if (attribute.equals(command[1])){
+              switch(role) {
+                case "Patient":
                   return true;
-                }
-                return false;
+                case "Nurse":
+                  if (attribute.equals(command[1])){
+                    return true;
+                  }
+                  return false;
 
-              case "Doctor":
-                if (attribute.equals(command[1])){
-                  return true;
-                }
-                return false;
+                case "Doctor":
+                  if (attribute.equals(command[1])){
+                    return true;
+                  }
+                  return false;
               }
+
             case "write":
             if (role.equals("Doctor") || role.equals("Nurse")) {
               return true;
             }
             return false;
+
+
             case "delete":
             if (role.equals("GovermentBody")) {
               return true;
             }
             return false;
+
+
             case "create":
               if (role.equals("Doctor")) {
                 return true;
@@ -186,6 +191,7 @@ public class server implements Runnable {
                   }
                   return false;
 
+                  
                 case "Doctor":
                   if (attribute.equals(command[1])){
                     return true;

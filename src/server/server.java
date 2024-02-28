@@ -70,6 +70,7 @@ public class server implements Runnable {
         } else {
           sendMessage(out,"Command not found");
         }
+        Commands.audit(recieved[0], userdata);
       }
       in.close();
       out.close();

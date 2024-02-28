@@ -12,17 +12,16 @@ import java.util.List;
 import java.util.Scanner;
 import java.time.format.DateTimeFormatter;  
 import java.time.LocalDateTime;    
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.Files;
+
 
 /*Describes what should happen based on which command was sent from client */
 public class Commands {
     private File root = new File("hospitaldatabase/Departments/");
 
     public String execute(String[] command, String[] userdata){
-        File auditFile = new File("hospitaldatabase/autiting.txt");
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
-        LocalDateTime now = LocalDateTime.now();  
-        try {
-            FileWriter auditer = new FileWriter(auditFile);
 
         switch(command[0]){
             case "read":
@@ -37,8 +36,6 @@ public class Commands {
                             List<String> fileLines = Files.readAllLines(file.toPath());
                             String fileContent = String.join("\n", fileLines);
                             scan.close();
-                            auditer.write(command[0] + " " + userdata[0] + " " + userdata[1] + " " + userdata[2] + dtf.format(now));
-                            auditer.close();
                             return fileContent;
                         }
                         scan.close();
@@ -114,11 +111,23 @@ public class Commands {
             default:
             return "No such command";
         }
-        } catch (IOException e) {
-            return "ERROR";
-        }
     }
 
+    public static void audit(String command, String[] userdata) {
+        File auditFile = new File("hospitaldatabase/auditing.txt");
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
+        LocalDateTime now = LocalDateTime.now(); 
+
+        try {
+            FileWriter auditer = new FileWriter(auditFile, true);
+            auditer.write("\n" + command + " " + userdata[0] + " " + userdata[1] + " " + userdata[2] + " " + dtf.format(now));
+            auditer.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+    }
     public static File findFile(String fileName, File directory) {
         // Check if the given directory is valid
         if (!directory.isDirectory()) {

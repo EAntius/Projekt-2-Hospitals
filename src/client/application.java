@@ -3,7 +3,6 @@ package client;
 import java.io.IOException;
 
 public class application {
-    public static swingTextEditor editor = new swingTextEditor();
     public static void main(String[] args) throws Exception {
         while (true) {
             String[] loginCredentials = login.getUserCredentials();
@@ -53,11 +52,11 @@ public class application {
                     System.out.println("\n\n...Exiting medical records...\n\n");
                     return;
                 case "write":
-                    connection.send(editor.openTextEditor(response));
+                    connection.send(swingTextEditor.openTextEditor(response));
                     System.out.println(connection.getResponse());
                     break;
                 case "create":
-                    connection.send(editor.openTextEditor(""));
+                    connection.send(swingTextEditor.openTextEditor(""));
                     System.out.println(connection.getResponse());
                     break;
                 default:

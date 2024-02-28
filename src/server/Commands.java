@@ -10,12 +10,20 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.Scanner;
+import java.time.format.DateTimeFormatter;  
+import java.time.LocalDateTime;    
 
 /*Describes what should happen based on which command was sent from client */
 public class Commands {
     private File root = new File("hospitaldatabase/Departments/");
 
     public String execute(String[] command, String[] userdata){
+        File auditFile = new File("hospitaldatabase/autiting.txt");
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
+        LocalDateTime now = LocalDateTime.now();  
+        try {
+            FileWriter auditer = new FileWriter(auditFile);
+
         switch(command[0]){
             case "read":
                 File file = findFile(command[1], root);
@@ -27,6 +35,8 @@ public class Commands {
                             List<String> fileLines = Files.readAllLines(file.toPath());
                             String fileContent = String.join("\n", fileLines);
                             scan.close();
+                            auditer.write(command[0] + " " + userdata[0] + " " + userdata[1] + " " + userdata[2] + dtf.format(now));
+                            auditer.close();
                             return fileContent;
                         }
                         scan.close();
@@ -100,6 +110,9 @@ public class Commands {
             
             default:
             return "No such command";
+        }
+        } catch (IOException e) {
+            return "ERROR";
         }
     }
 

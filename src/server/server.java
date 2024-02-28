@@ -143,20 +143,20 @@ public class server implements Runnable {
     scan.close();
     return null;
   }
-  private boolean accessControl(String[] command, String role, String attribute) {
+  private boolean accessControl(String[] command, String role, String department) {
     switch(command[0]){
             case "read":
               switch(role) {
                 case "Patient":
                   return true;
                 case "Nurse":
-                  if (attribute.equals(command[1])){
+                  if (department.equals(command[1])){
                     return true;
                   }
                   return false;
 
                 case "Doctor":
-                  if (attribute.equals(command[1])){
+                  if (department.equals(command[1])){
                     return true;
                   }
                   return false;
@@ -186,14 +186,14 @@ public class server implements Runnable {
                 case "Patient":
                   return true;
                 case "Nurse":
-                  if (attribute.equals(command[1])){
+                  if (department.equals(command[1])){
                     return true;
                   }
                   return false;
 
-                  
+
                 case "Doctor":
-                  if (attribute.equals(command[1])){
+                  if (department.equals(command[1])){
                     return true;
                   }
                   return false;

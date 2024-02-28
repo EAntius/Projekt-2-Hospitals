@@ -12,9 +12,9 @@ import java.util.Scanner;
 
 /*Describes what should happen based on which command was sent from client */
 public class Commands {
+    private File root = new File("hospitaldatabase/Departments/");
 
     public String execute(String[] command, String[] userdata){
-        File root = new File("hospitaldatabase/Departments/");
         switch(command[0]){
             case "read":
                 File file = findFile(command[1], root);
@@ -57,9 +57,7 @@ public class Commands {
                 File newRecord = new File(root +"\\"+ userdata[2] + "\\" + command[3]);
                 try {    
                     FileWriter recordtext = new FileWriter(newRecord);
-                    System.out.println(newRecord.getAbsolutePath());
                     recordtext.write(command[1] + " " + command[2] + " " + userdata[0] + " " + userdata[2]);
-                    System.out.println("hjd");
                     recordtext.close();
                     return "creation successful";
                 } catch (IOException e) {
@@ -105,13 +103,19 @@ public class Commands {
 
     /*The first time, file is set to "Departments" */
     public File findFile(String name, File file) {
+        System.out.println(name);
         File[] list = file.listFiles();
         if(list != null) {
             for(File f : list) {
-                if(file.isDirectory()) {
-                    findFile(name, f);
-                } else if(name.equals(f.getName())) {
+                System.out.println(f.getName());
+                if(name.equals(f.getName())) {
+                    System.out.println(f.getName());
+                    System.out.println("TJABBALABBA");
                     return f;
+                
+                } else if(file.isDirectory()) {
+                    System.out.println("Is dir");
+                    return findFile(name, f);
                 }
             }
         }
@@ -119,19 +123,22 @@ public class Commands {
         
     }
 
-    public void writeToFile(String editedText, String fileName) {
-        File root = new File("hospitaldatabase/Departments");
-        File toEdit = findFile(fileName, root);
+    public String writeToFile(String editedText, String fileName, String userdata) {
+        File start = new File(root +"\\"+ userdata);
+        System.out.println(root +"\\"+ userdata);
+        File toEdit = findFile(fileName, start);
         if(toEdit == null) {
-           return;
+           return "No such file";
 
         }
         try {    
             FileWriter writer = new FileWriter(toEdit);
             writer.write(editedText);
             writer.close();
+            return "Success";
         }catch (IOException e) {
             e.printStackTrace();
+            return "ERROR";
         }
     }
 }

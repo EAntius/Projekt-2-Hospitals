@@ -22,7 +22,7 @@ public class Commands {
                     try{
                         Scanner scan = new Scanner(file);
                         String[] personel = scan.nextLine().trim().split(" ");
-                        if(personel[0].compareTo(userdata[0]) == 1 || userdata[2].compareTo(personel[3]) == 1) {
+                        if(personel[0].equals(userdata[0]) || userdata[2].equals(personel[3])) {
                             List<String> fileLines = Files.readAllLines(file.toPath());
                             String fileContent = String.join("\n", fileLines);
                             scan.close();

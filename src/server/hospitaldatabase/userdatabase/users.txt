@@ -1,4 +1,2 @@
 username role department
 test Patient 0
-
-test Doctor surgery

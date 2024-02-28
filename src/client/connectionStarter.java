@@ -1,12 +1,8 @@
 package client;
 
-import java.net.*;
 import java.io.*;
 import javax.net.ssl.*;
-import java.security.cert.X509Certificate;
-import java.sql.Connection;
 import java.security.KeyStore;
-import java.security.cert.*;
 
 /*
  * This example shows how to set up a key manager to perform client

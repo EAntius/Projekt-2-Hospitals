@@ -21,7 +21,7 @@ import java.nio.file.Files;
 public class Commands {
     private File root = new File("hospitaldatabase/Departments/");
 
-    public String execute(String[] command, String[] userdata) throws FileNotFoundException{
+    public String execute(String[] command, String[] userdata) {
 
         switch(command[0]){
             case "read":
@@ -29,10 +29,10 @@ public class Commands {
                 if(file != null) {
                     try{
                         Scanner scan = new Scanner(file);
-                        String[] personel = scan.nextLine().trim().split(" ");
-                        if(((userdata[1].equals("Patient")) && (personel[0].equals(userdata[0]) || userdata[2].equals(personel[3])))
+                        String[] file_header = scan.nextLine().trim().split(" ");
+                        if(((userdata[1].equals("Patient")) && (file_header[0].equals(userdata[0]) || userdata[2].equals(file_header[3])))
                         || userdata[1].equals("GovernmentBody") 
-                        || ((userdata[1].equals("Nurse") || userdata[1].equals("Doctor"))) && personel[3].equals(userdata[2])) {
+                        || ((userdata[1].equals("Nurse") || userdata[1].equals("Doctor"))) && file_header[3].equals(userdata[2])) {
                             List<String> fileLines = Files.readAllLines(file.toPath());
                             fileLines.remove(0);
                             String fileContent = String.join("\n", fileLines);
@@ -45,18 +45,27 @@ public class Commands {
                         e.printStackTrace();
                     }
                 }
-                return "File not found";
+                return "Command not found";
             case "write":
-                try{
-                    File toExctract = findFile(command[1], root);
-                    List<String> fileLines = Files.readAllLines(toExctract.toPath());
-                    fileLines.remove(0);
-                    String fileContent = String.join("\n", fileLines);
-                    return fileContent;
-                } catch(IOException e) {
-                    e.printStackTrace();
-                    return "Exception";
-                }   
+                
+                File toExtract = findFile(command[1], root);
+                if (toExtract != null) {
+                    List<String> fileLines;
+                    try {
+                        fileLines = Files.readAllLines(toExtract.toPath());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        return "Command not found";
+                    }
+                    String[] fileHeader = fileLines.get(0).split(" ");
+                    if((userdata[1].equals("Nurse")  && fileHeader[1].equals(userdata[0])) || 
+                        (userdata[1].equals("Doctor") && fileHeader[2].equals(userdata[0]))) {
+                        fileLines.remove(0);
+                        String fileContent = String.join("\n", fileLines);
+                        return fileContent;
+                    }
+                } 
+                return "Command not found";
 
             case "delete":
                 File exists = findFile(command[1], root);
@@ -83,9 +92,15 @@ public class Commands {
                     String path = root.getPath() + "/" + command[1];
                     File[] fileList = new File(path).listFiles();
                     for(int i = 0; i < fileList.length; i++) {
-                        Scanner scan = new Scanner(fileList[i]);
-                        String[] personel = scan.nextLine().trim().split(" ");
-                        if(personel[0].equals(userdata[0]) ||
+                        Scanner scan;
+                        try {
+                            scan = new Scanner(fileList[i]);
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                            return "Command not found";
+                        }
+                        String[] fileHeader = scan.nextLine().trim().split(" ");
+                        if(fileHeader[0].equals(userdata[0]) ||
                             userdata[1].equals("Doctor") ||
                             userdata[1].equals("Nurse") ||
                             userdata[1].equals("GovernmentBody")) {
@@ -102,7 +117,7 @@ public class Commands {
                 return menu;
             
             default:
-            return "No such command";
+            return "Command not found";
         }
     }
 
@@ -119,7 +134,7 @@ public class Commands {
             e.printStackTrace();
         }
     }
-    
+
     public static File findFile(String fileName, File directory) {
         // Check if the given directory is valid
         if (!directory.isDirectory()) {

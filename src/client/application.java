@@ -42,7 +42,8 @@ public class application {
             String response = connection.getResponse();
             if (response == null) {
                 continue;
-            } if (response.equals("Command not found")) {
+            } 
+            if (response.equals("Command not found")) {
                 System.out.println(response);
                 continue;
             }

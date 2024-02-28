@@ -58,8 +58,9 @@ public class server implements Runnable {
       while ((clientMsg = getMessage(in)) != null) {
         String[] recieved = clientMsg.split(" "); /*recieved now holds (a command and text file) */
         if(accessControl(recieved, subjectRole, subjectAttribute)) {
-          sendMessage(out, commander.execute(recieved, userdata));
-          if (recieved[0].equals("write")) {
+          String response = commander.execute(recieved, userdata);
+          sendMessage(out, response);
+          if (!response.equals("Command not found") && recieved[0].equals("write")) {
             String editedText = getMessage(in);
             sendMessage(out, commander.writeToFile(editedText, recieved[1], userdata[2]));
           } else if(recieved[0].equals("create")) {

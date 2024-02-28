@@ -40,6 +40,7 @@ public class Commands {
                 try{
                     File toExctract = findFile(command[1], root);
                     List<String> fileLines = Files.readAllLines(toExctract.toPath());
+                    fileLines.remove(0);
                     String fileContent = String.join("\n", fileLines);
                     return fileContent;
                 } catch(IOException e) {

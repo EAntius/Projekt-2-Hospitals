@@ -53,7 +53,6 @@ public class server implements Runnable {
       }
 
       String subjectRole = userdata[1];
-      System.out.println(subjectRole);
       String subjectAttribute = userdata[2]; /*This data should be sent to the reference monitor */
 
       while ((clientMsg = getMessage(in)) != null) {
@@ -150,9 +149,7 @@ public class server implements Runnable {
 
             case "write":
             if (role.equals("Doctor") || role.equals("Nurse")) {
-              if (attribute.equals(command[1])) {
-                return true;
-              }
+              return true;
             }
             return false;
             case "delete":
@@ -162,7 +159,6 @@ public class server implements Runnable {
             return false;
             case "create":
               if (role.equals("Doctor")) {
-                System.out.println(role.equals("Doctor"));
                 return true;
               }
             return false;

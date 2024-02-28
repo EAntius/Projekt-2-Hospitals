@@ -142,6 +142,7 @@ public class Commands {
             FileWriter writer = new FileWriter(toEdit);
             writer.write(header + "\n" + editedText);
             writer.close();
+            existingText.close();
             return "Success";
         }catch (IOException e) {
             e.printStackTrace();

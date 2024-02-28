@@ -63,14 +63,21 @@ public class server implements Runnable {
             String editedText = getMessage(in);
             sendMessage(out, commander.writeToFile(editedText, recieved[1], userdata[2]));
           } else if(recieved[0].equals("create")) {
+            Commands.audit(recieved[0], recieved[3], userdata, true);
+
             String editedText = getMessage(in);
             sendMessage(out, commander.writeToFile(editedText, recieved[3], userdata[2]));
+          } else if(recieved[0].equals("ls")) {
+            Commands.audit(recieved[0], null, userdata, true);
+
+          } else {
+            Commands.audit(recieved[0], recieved[1], userdata, true);
           }
 
         } else {
           sendMessage(out,"Command not found");
+          Commands.audit(recieved[0], null, userdata, false);
         }
-        Commands.audit(recieved[0], userdata);
       }
       in.close();
       out.close();

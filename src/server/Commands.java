@@ -114,14 +114,19 @@ public class Commands {
         }
     }
 
-    public static void audit(String command, String[] userdata) {
+    public static void audit(String command, String fileName, String[] userdata, boolean pass) {
         File auditFile = new File("hospitaldatabase/auditing.txt");
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
         LocalDateTime now = LocalDateTime.now(); 
 
         try {
             FileWriter auditer = new FileWriter(auditFile, true);
-            auditer.write("\n" + command + " " + userdata[0] + " " + userdata[1] + " " + userdata[2] + " " + dtf.format(now));
+            if(fileName != null) {
+                auditer.write("\n" + command + "                "+ fileName +"                " + userdata[0] +  "                " + userdata[1] + "                " + userdata[2] + "                " + dtf.format(now) + "                " + pass);
+
+            } else {
+                auditer.write("\n" + command + "                "+ "N/A" +"                " + userdata[0] +  "                " + userdata[1] + "                " + userdata[2] + "                " + dtf.format(now) + "                " + pass);
+            }
             auditer.close();
         } catch (Exception e) {
             e.printStackTrace();

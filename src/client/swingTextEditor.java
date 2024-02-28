@@ -47,15 +47,17 @@ public class swingTextEditor extends JFrame {
         });
     }
 
-    public String openTextEditor(String fileText) throws InterruptedException {
+    public static String openTextEditor(String fileText) throws InterruptedException {
+        swingTextEditor swingTextEditor = new swingTextEditor();
+
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                textArea.setText(fileText);
-                setVisible(true);
+                swingTextEditor.textArea.setText(fileText);
+                swingTextEditor.setVisible(true);
             }
         });
-        latch.await();
-        return textArea.getText();
+        swingTextEditor.latch.await();
+        return swingTextEditor.textArea.getText();
     }
 }

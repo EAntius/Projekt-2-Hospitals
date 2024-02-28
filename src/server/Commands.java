@@ -27,6 +27,7 @@ public class Commands {
                         || userdata[1].equals("GovernmentBody") 
                         || ((userdata[1].equals("Nurse") || userdata[1].equals("Doctor"))) && personel[3].equals(userdata[2])) {
                             List<String> fileLines = Files.readAllLines(file.toPath());
+                            fileLines.remove(0);
                             String fileContent = String.join("\n", fileLines);
                             scan.close();
                             return fileContent;

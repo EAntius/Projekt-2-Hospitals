@@ -103,6 +103,7 @@ public class Commands {
 
             } else {
                 File[] fileList = root.listFiles();
+                System.out.println(fileList.length);
                 for(int i = 0; i < fileList.length; i++) {
                     menu += String.format("* %d - %s\n", i+1, fileList[i].getName());
                 }

@@ -50,7 +50,6 @@ public class connectionStarter {
        */
 
       socket.startHandshake();
-      System.out.println("\n\nsecure connection established\n");
 
       BufferedReader read = new BufferedReader(new InputStreamReader(System.in));
       PrintWriter out = new PrintWriter(socket.getOutputStream(), true);

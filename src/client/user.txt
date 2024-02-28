@@ -5,3 +5,4 @@ Hugo ./openSSL/Hugo koLi
 Skatteverket ./openSSL/Skatteverket opSQi5.O
 Hassan ./openSSL/Hassan jOkQ
 test ./openSSL/test p
+new ./openSSL/new

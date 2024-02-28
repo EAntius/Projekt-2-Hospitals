@@ -31,7 +31,9 @@ public class Commands {
                     try{
                         Scanner scan = new Scanner(file);
                         String[] personel = scan.nextLine().trim().split(" ");
-                        if(personel[0].equals(userdata[0]) || userdata[2].equals(personel[3])) {
+                        if(((userdata[1].equals("Patient")) && (personel[0].equals(userdata[0]) || userdata[2].equals(personel[3])))
+                        || userdata[1].equals("GovernmentBody") 
+                        || ((userdata[1].equals("Nurse") || userdata[1].equals("Doctor"))) && personel[3].equals(userdata[2])) {
                             List<String> fileLines = Files.readAllLines(file.toPath());
                             String fileContent = String.join("\n", fileLines);
                             scan.close();
@@ -40,7 +42,7 @@ public class Commands {
                             return fileContent;
                         }
                         scan.close();
-                        return "Read failed due to insufficient acces";
+                        return "Read failed due to insufficient access";
                     } catch(IOException e) {
                         e.printStackTrace();
                     }

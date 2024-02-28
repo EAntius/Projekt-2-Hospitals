@@ -146,22 +146,7 @@ public class server implements Runnable {
   private boolean accessControl(String[] command, String role, String department) {
     switch(command[0]){
             case "read":
-              switch(role) {
-                case "Patient":
-                  return true;
-                case "Nurse":
-                  if (department.equals(command[1])){
-                    return true;
-                  }
-                  return false;
-
-                case "Doctor":
-                  if (department.equals(command[1])){
-                    return true;
-                  }
-                  return false;
-              }
-
+              return true;
             case "write":
             if (role.equals("Doctor") || role.equals("Nurse")) {
               return true;

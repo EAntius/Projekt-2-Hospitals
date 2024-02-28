@@ -21,7 +21,7 @@ import java.nio.file.Files;
 public class Commands {
     private File root = new File("hospitaldatabase/Departments/");
 
-    public String execute(String[] command, String[] userdata){
+    public String execute(String[] command, String[] userdata) throws FileNotFoundException{
 
         switch(command[0]){
             case "read":
@@ -78,36 +78,28 @@ public class Commands {
                 }
 
             case "ls":
-            String menu = "** Files **\n";
-            if(command.length != 1) {
-                String path = root.getPath() + "/" + command[1];
-                System.out.println(path);
-                File file2 = new File(path);
-                File[] fileList = file2.listFiles();
-                for(int i = 0; i < fileList.length; i++) {
-                    try {    
+                String menu = "** Files **\n";
+                if(command.length != 1) {
+                    String path = root.getPath() + "/" + command[1];
+                    File[] fileList = new File(path).listFiles();
+                    for(int i = 0; i < fileList.length; i++) {
                         Scanner scan = new Scanner(fileList[i]);
                         String[] personel = scan.nextLine().trim().split(" ");
-                        System.out.println(personel[0]);
-                        if(personel[0].equals(userdata[0]) || userdata[2].equals(personel[3])) {
-                            menu += String.format("* %d - %s\n", i+1, fileList[i].getName());
+                        if(personel[0].equals(userdata[0]) ||
+                            userdata[1].equals("Doctor") ||
+                            userdata[1].equals("Nurse") ||
+                            userdata[1].equals("GovernmentBody")) {
+                            menu += String.format("* - %s\n", fileList[i].getName());
                         }
                         scan.close();
-                        return menu;
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
+                    }
+                } else {
+                    File[] fileList = root.listFiles();
+                    for(int i = 0; i < fileList.length; i++) {
+                        menu += String.format("* %d - %s\n", i+1, fileList[i].getName());
                     }
                 }
-
-            } else {
-                File[] fileList = root.listFiles();
-                System.out.println(fileList.length);
-                for(int i = 0; i < fileList.length; i++) {
-                    menu += String.format("* %d - %s\n", i+1, fileList[i].getName());
-                }
-            }
-
-            return menu;
+                return menu;
             
             default:
             return "No such command";
@@ -126,9 +118,8 @@ public class Commands {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
+    
     public static File findFile(String fileName, File directory) {
         // Check if the given directory is valid
         if (!directory.isDirectory()) {

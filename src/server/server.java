@@ -147,19 +147,22 @@ public class server implements Runnable {
     switch(command[0]){
             case "read":
               switch(role) {
-                case "Patient":
-                  return true;
                 case "Nurse":
-                  if (attribute.equals(command[1])){
-                    return true;
+                  if (command.length > 1) {
+                    if(attribute.equals(command[1])){
+                      return true;
+                    }
                   }
                   return false;
-
                 case "Doctor":
-                  if (attribute.equals(command[1])){
-                    return true;
+                  if (command.length > 1) {
+                    if(attribute.equals(command[1])){
+                      return true;
+                    }
                   }
                   return false;
+                default:
+                  return true;
               }
 
             case "write":
@@ -183,23 +186,23 @@ public class server implements Runnable {
             return false;
             case "ls":
               switch(role) {
-                case "Patient":
-                  return true;
                 case "Nurse":
-                  if (attribute.equals(command[1])){
-                    return true;
+                  if (command.length > 1) {
+                    if(attribute.equals(command[1])){
+                      return true;
+                    }
                   }
                   return false;
-
-                  
                 case "Doctor":
-                  if (attribute.equals(command[1])){
-                    return true;
+                  if (command.length > 1) {
+                    if(attribute.equals(command[1])){
+                      return true;
+                    }
                   }
                   return false;
 
                 default:
-                return false;
+                return true;
               }
             
             default:

@@ -164,10 +164,10 @@ public class server implements Runnable {
 
 
             case "delete":
-            if (role.equals("GovermentBody")) {
-              return true;
-            }
-            return false;
+              if (role.equals("GovernmentBody")) {
+                return true;
+              }
+              return false;
 
 
             case "create":

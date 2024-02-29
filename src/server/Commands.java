@@ -91,6 +91,9 @@ public class Commands {
                 if(command.length != 1) {
                     String path = root.getPath() + "/" + command[1];
                     File[] fileList = new File(path).listFiles();
+                    if (fileList == null) {
+                        return "Command not found";
+                    }
                     for(int i = 0; i < fileList.length; i++) {
                         Scanner scan;
                         try {
